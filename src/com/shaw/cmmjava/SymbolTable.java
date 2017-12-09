@@ -2,6 +2,8 @@ package com.shaw.cmmjava;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.shaw.cmmjava.exception.InterpretException;
 import com.shaw.cmmjava.model.Symbol;
@@ -113,13 +115,26 @@ public class SymbolTable {
      * @throws InterpretException 
      */
     public Value getSymbolValue(String name, int index) throws InterpretException {
+    	 Pattern pattern = Pattern.compile("[0-9]*$");  
+         Matcher isNum = pattern.matcher(name); 
+         if(isNum.matches()) {
+        	 Value value=new Value(Symbol.SINGLE_INT);
+        	 value.setInt(Integer.parseInt(name));
+        	 return value;
+         }
         Symbol s = getSymbol(name);
         if (index == -1) {//单值
             return s.getValue();
         } else {
-            if (s.getValue().getArrayInt().length < index + 1) {
-                throw new InterpretException("数组 <" + name + "> 下标 " + index +" 越界");
-            }
+        	if(s.getType()==Symbol.ARRAY_INT) {
+	            if (s.getValue().getArrayInt().length < index + 1) {
+	                throw new InterpretException("数组 <" + name + "> 下标 " + index +" 越界");
+	            }
+        	}else {
+        		if (s.getValue().getArrayReal().length < index + 1) {
+	                throw new InterpretException("数组 <" + name + "> 下标 " + index +" 越界");
+	            }
+        	}
             if (s.getType() == Symbol.ARRAY_INT) {
                 Value rv = new Value(Symbol.SINGLE_INT);
                 rv.setInt(s.getValue().getArrayInt()[index]);

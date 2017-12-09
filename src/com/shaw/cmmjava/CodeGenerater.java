@@ -279,10 +279,40 @@ public class CodeGenerater {
      * @return
      * @throws InterpretException
      */
+//    private String interpretTermExp(TreeNode node) throws InterpretException {
+//        String opcode = getOpcode(node.getMiddle().getDataType());
+//        String temp1 = symbolTable.getTempSymbol().getName();
+//        if (node.getRight().getType() == TreeNode.FACTOR) {
+//            codes.add(new FourCode(opcode, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp1));
+//            mLine++;
+//        } else {
+//            codes.add(new FourCode(opcode, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp1));
+//            mLine++;
+//            node = node.getRight();
+//            String temp2 = null;
+//            while (node.getRight() != null && node.getRight().getType() != TreeNode.FACTOR) {
+//                opcode = getOpcode(node.getMiddle().getDataType());
+//                temp2 = symbolTable.getTempSymbol().getName();
+//                codes.add(new FourCode(opcode, temp1, interpretExp(node.getRight().getLeft()), temp2));
+//                mLine++;
+//                node = node.getRight();
+//                temp1 = temp2;
+//            }
+//            opcode = getOpcode(node.getMiddle().getDataType());
+//            temp2 = symbolTable.getTempSymbol().getName();
+//            codes.add(new FourCode(opcode, temp1, interpretExp(node.getRight()), temp2));
+//            mLine++;
+//            temp1 = temp2;
+//        }
+//        return temp1;
+//    }
+    
+    
+    
     private String interpretTermExp(TreeNode node) throws InterpretException {
         String opcode = getOpcode(node.getMiddle().getDataType());
         String temp1 = symbolTable.getTempSymbol().getName();
-        if (node.getRight().getType() == TreeNode.FACTOR) {
+        if ((node.getRight().getType() == TreeNode.FACTOR)||(node.getRight().getType() == TreeNode.VAR)) {
             codes.add(new FourCode(opcode, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp1));
             mLine++;
         } else {
@@ -306,7 +336,6 @@ public class CodeGenerater {
         }
         return temp1;
     }
-    
     private String getOpcode(int op) {
         if (op == Token.MUL) {
             return FourCode.MUL;

@@ -282,4 +282,18 @@ public class Value {
         }
     }
 
+    /**
+     * 获取Value对应的real值
+     * @return
+     */
+    public Value toReal() {
+        if (mType == Symbol.SINGLE_REAL) {
+            return this;
+        } else {
+            mType = Symbol.SINGLE_REAL;
+            mReal = (int) mInt;
+            mInt = 0;
+            return this;
+        }
+    }
 }
